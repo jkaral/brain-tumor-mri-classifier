@@ -1,0 +1,45 @@
+{
+  "target_validation_recall": 0.97,
+  "selected_threshold": 0.28715580701828003,
+  "test_roc_auc": 0.9962854166666667,
+  "validation_roc_auc": 0.9959948979591837,
+  "validation_metrics": {
+    "accuracy": 0.9723214285714286,
+    "precision": 0.991494532199271,
+    "recall": 0.9714285714285714,
+    "specificity": 0.975,
+    "f1": 0.9813589897775106,
+    "true_negatives": 273,
+    "false_positives": 7,
+    "false_negatives": 24,
+    "true_positives": 816
+  },
+  "default_test_metrics": {
+    "accuracy": 0.93125,
+    "precision": 0.9990842490842491,
+    "recall": 0.9091666666666667,
+    "specificity": 0.9975,
+    "f1": 0.9520069808027923,
+    "true_negatives": 399,
+    "false_positives": 1,
+    "false_negatives": 109,
+    "true_positives": 1091
+  },
+  "tuned_test_metrics": {
+    "accuracy": 0.946875,
+    "precision": 0.998212689901698,
+    "recall": 0.9308333333333333,
+    "specificity": 0.995,
+    "f1": 0.9633462699439413,
+    "true_negatives": 398,
+    "false_positives": 2,
+    "false_negatives": 83,
+    "true_positives": 1117
+  },
+  "tuned_subtype_results": [
+    {"category": "glioma", "images": 400, "correct": 357, "errors": 43, "accuracy": 0.8925},
+    {"category": "meningioma", "images": 400, "correct": 366, "errors": 34, "accuracy": 0.915},
+    {"category": "pituitary", "images": 400, "correct": 394, "errors": 6, "accuracy": 0.985},
+    {"category": "notumor", "images": 400, "correct": 398, "errors": 2, "accuracy": 0.995}
+  ]
+}

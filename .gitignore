@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+.env
+.DS_Store
+
+# Dataset and generated masks
+archive*.zip
+brain-tumor-mri-dataset/
+data/Training/
+data/Testing/
+generated_masks/
+
+# Model binaries: distribute using a release asset, registry, or Git LFS
+models/*.keras
+models/*.h5
+
+# Local Streamlit secrets
+.streamlit/secrets.toml
+
