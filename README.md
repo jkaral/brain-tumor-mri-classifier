@@ -145,10 +145,4 @@ The automated tests check image preprocessing and the saved threshold configurat
 - Performance may change under different scanners, acquisition settings, populations, preprocessing, compression, or image quality.
 
 See [MODEL_CARD.md](MODEL_CARD.md) for the full responsible-use statement.
-
-## Resume-ready summary
-
-**Brain Tumour MRI Classifier — Python, TensorFlow, Keras, OpenCV, scikit-learn**
-
-- Developed a VGG16 transfer-learning pipeline to classify tumour versus no-tumour brain MRI images across a 7,200-image dataset, incorporating augmentation, class weighting, early stopping and held-out evaluation.
 - Achieved 94.7% test accuracy, 0.9963 ROC-AUC, 99.8% precision and 93.1% recall on 1,600 held-out images; reduced false negatives by 23.9% through validation-based threshold calibration and conducted tumour-category error analysis.
