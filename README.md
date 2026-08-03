@@ -144,5 +144,11 @@ The automated tests check image preprocessing and the saved threshold configurat
 - Glioma and meningioma images produced most false negatives.
 - Performance may change under different scanners, acquisition settings, populations, preprocessing, compression, or image quality.
 
+## License
+
+The original source code and documentation in this repository are available under the MIT License.
+
+The MRI dataset, third-party libraries, pretrained VGG16 components, and other external assets remain subject to their respective licenses and terms. This repository does not redistribute the original dataset.
+
 See [MODEL_CARD.md](MODEL_CARD.md) for the full responsible-use statement.
 - Achieved 94.7% test accuracy, 0.9963 ROC-AUC, 99.8% precision and 93.1% recall on 1,600 held-out images; reduced false negatives by 23.9% through validation-based threshold calibration and conducted tumour-category error analysis.
