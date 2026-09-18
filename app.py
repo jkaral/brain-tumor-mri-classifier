@@ -1,6 +1,7 @@
 """Streamlit interface for the experimental MRI classifier."""
 
 from __future__ import annotations
+from src.model_download import ensure_model
 
 import os
 from pathlib import Path
@@ -65,8 +66,12 @@ else:
 
     if st.button("Run classifier", type="primary", use_container_width=True):
         try:
-            model = get_model(str(MODEL_PATH))
-            with st.spinner("Processing image..."):
+            with st.spinner("Preparing model..."):
+                verified_model_path = ensure_model(MODEL_PATH)
+                model = get_model(str(verified_model_path))
+
+with st.spinner("Processing image..."):
+    score = predict_score(model, uploaded_image)
                 score = predict_score(model, uploaded_image)
         except FileNotFoundError as error:
             st.error(str(error))
