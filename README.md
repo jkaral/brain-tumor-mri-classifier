@@ -2,7 +2,7 @@
 
 An experimental binary image classifier that uses VGG16 transfer learning to distinguish brain MRI images labelled **tumour** from those labelled **no tumour**. The project includes a reproducible evaluation record, validation-selected decision threshold, subtype error analysis, figure-generation script, and Streamlit inference interface.
 
-> **Educational use only:** this project is not a medical device, does not provide a diagnosis, and has not been clinically validated. Its outputs must not be used to make healthcare decisions.
+> **DISCLAIMER: Educational use only:** this project is not a medical device, does not provide a diagnosis, and has not been clinically validated. Its outputs must not be used to make healthcare decisions.
 
 ## Results
 
