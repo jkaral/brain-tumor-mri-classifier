@@ -64,11 +64,39 @@ else:
 
     st.image(uploaded_image, caption="Uploaded image", use_container_width=True)
 
-    if st.button("Run classifier", type="primary", use_container_width=True):
+        if st.button("Run classifier", type="primary", use_container_width=True):
         try:
             with st.spinner("Preparing model..."):
                 verified_model_path = ensure_model(MODEL_PATH)
                 model = get_model(str(verified_model_path))
+
+            with st.spinner("Processing image..."):
+                score = predict_score(model, uploaded_image)
+
+        except FileNotFoundError as error:
+            st.error(str(error))
+            st.stop()
+
+        except Exception:
+            st.error(
+                "Inference failed. Confirm that the portable model and compatible "
+                "TensorFlow version are installed."
+            )
+            st.stop()
+
+        st.subheader("Experimental output")
+        st.progress(score)
+        st.write(f"Model score: **{score:.4f}**")
+
+        if score >= threshold:
+            st.warning("Classification: tumour-like pattern detected")
+        else:
+            st.success("Classification: no-tumour pattern detected")
+
+        st.caption(
+            "The model score is not a calibrated medical probability. False negatives "
+            "and false positives remain possible."
+        )
 
 with st.spinner("Processing image..."):
     score = predict_score(model, uploaded_image)
