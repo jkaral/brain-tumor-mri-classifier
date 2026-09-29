@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 from pathlib import Path
@@ -96,6 +97,18 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    baseline_report_path = ROOT / "artifacts" / "clean_baseline" / "evaluation.json"
+    if not baseline_report_path.is_file():
+        raise FileNotFoundError(
+            f"Run train_clean_baseline.py first; missing {baseline_report_path}"
+        )
+    with baseline_report_path.open(encoding="utf-8") as input_file:
+        baseline = json.load(input_file)
+    manifest_sha256 = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
+    if baseline.get("manifest_sha256") != manifest_sha256:
+        raise ValueError("Frozen baseline report was produced from a different or unrecorded split manifest.")
+    if baseline.get("target_validation_recall") != args.target_validation_recall:
+        raise ValueError("Frozen baseline and fine-tuning must use the same validation recall target.")
     if not args.input_model.is_file():
         raise FileNotFoundError(
             f"Clean baseline model does not exist: {args.input_model}"
@@ -184,6 +197,7 @@ def main() -> None:
 
     report = {
         "seed": SEED,
+        "manifest_sha256": manifest_sha256,
         "model": "VGG16 clean baseline with block 5 fine-tuned",
         "input_model": str(args.input_model),
         "fine_tuned_vgg_layers": trainable_vgg_layers,
@@ -215,27 +229,23 @@ def main() -> None:
         },
     }
 
-    baseline_report_path = ROOT / "artifacts" / "clean_baseline" / "evaluation.json"
-    if baseline_report_path.is_file():
-        with baseline_report_path.open(encoding="utf-8") as input_file:
-            baseline = json.load(input_file)
-        report["comparison_to_frozen_baseline"] = {
-            "test_roc_auc_change": (
-                report["test_roc_auc"] - baseline["test_roc_auc"]
-            ),
-            "default_accuracy_change": (
-                report["default_test_metrics"]["accuracy"]
-                - baseline["default_test_metrics"]["accuracy"]
-            ),
-            "tuned_accuracy_change": (
-                report["tuned_test_metrics"]["accuracy"]
-                - baseline["tuned_test_metrics"]["accuracy"]
-            ),
-            "tuned_recall_change": (
-                report["tuned_test_metrics"]["recall"]
-                - baseline["tuned_test_metrics"]["recall"]
-            ),
-        }
+    report["comparison_to_frozen_baseline"] = {
+        "test_roc_auc_change": (
+            report["test_roc_auc"] - baseline["test_roc_auc"]
+        ),
+        "default_accuracy_change": (
+            report["default_test_metrics"]["accuracy"]
+            - baseline["default_test_metrics"]["accuracy"]
+        ),
+        "tuned_accuracy_change": (
+            report["tuned_test_metrics"]["accuracy"]
+            - baseline["tuned_test_metrics"]["accuracy"]
+        ),
+        "tuned_recall_change": (
+            report["tuned_test_metrics"]["recall"]
+            - baseline["tuned_test_metrics"]["recall"]
+        ),
+    }
 
     report_path = args.output_directory / "evaluation.json"
     with report_path.open("w", encoding="utf-8") as output_file:

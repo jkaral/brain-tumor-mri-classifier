@@ -6,6 +6,8 @@ An experimental binary image classifier that uses VGG16 transfer learning to dis
 
 ## Results
 
+**Original image-level split only.** The results below come from the original training/validation division and supplied testing folder. They are not clean-split results or evidence that block 5 fine-tuning improved the frozen baseline. Patient identifiers were unavailable, so related images may still cross splits.
+
 The final decision threshold (`0.287156`) was selected on the validation set to reach at least 97% tumour recall while minimizing false positives. The threshold was then locked and applied to the held-out test set.
 
 | Metric | Held-out test result |
@@ -21,6 +23,10 @@ The final decision threshold (`0.287156`) was selected on the validation set to 
 Threshold calibration reduced false negatives from 109 to 83, a **23.9% reduction**, while increasing false positives from one to two.
 
 The ROC-AUC reported here is the exact score-level value calculated from the saved test predictions with scikit-learn (`0.996285`). TensorFlow's streaming evaluation displayed `0.9917` because it approximated AUC over a finite threshold grid.
+
+### Clean-split fine-tuning status
+
+`train_clean_baseline.py` and `fine_tune_clean_model.py` can evaluate both models on the same leakage-resistant manifest. Their clean-split evaluation reports are not committed, so no improvement is claimed. Run the frozen baseline first, then fine-tune from its saved checkpoint using the same manifest and validation recall target. Fine-tuning now requires the baseline report and matching manifest hash before training. Publish both evaluation reports and prediction files, their split/audit outputs and model provenance before reporting a comparison. The original metrics above are not a substitute for the clean frozen baseline.
 
 ![Tuned confusion matrix](docs/figures/confusion_matrix_tuned.png)
 

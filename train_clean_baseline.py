@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import random
 from collections import Counter
@@ -337,6 +338,7 @@ def main() -> None:
 
     report = {
         "seed": SEED,
+        "manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
         "model": "VGG16 frozen baseline",
         "image_size": list(IMAGE_SIZE),
         "class_weights": {str(key): value for key, value in class_weights.items()},
