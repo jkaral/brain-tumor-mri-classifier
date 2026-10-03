@@ -1,12 +1,4 @@
-"""Evaluate probability calibration and selective prediction.
-
-Temperature scaling is fit using validation predictions only. The fitted
-temperature is then locked and applied to the held-out test predictions.
-
-The script also evaluates selective prediction by deriving uncertainty
-cutoffs from validation predictions and applying those cutoffs unchanged
-to the test set.
-"""
+"""Evaluate calibration and selective prediction for saved model outputs."""
 
 from __future__ import annotations
 
@@ -30,7 +22,7 @@ EPSILON = 1e-7
 
 
 def clip_probabilities(probabilities: np.ndarray) -> np.ndarray:
-    """Keep probabilities away from exactly 0 and 1 for stable logits."""
+    """Clip probabilities away from exactly 0 and 1."""
     return np.clip(
         np.asarray(probabilities, dtype=np.float64),
         EPSILON,
@@ -39,14 +31,15 @@ def clip_probabilities(probabilities: np.ndarray) -> np.ndarray:
 
 
 def probabilities_to_logits(probabilities: np.ndarray) -> np.ndarray:
-    """Convert binary probabilities to logits."""
+    """Convert probabilities to logits."""
     probabilities = clip_probabilities(probabilities)
     return np.log(probabilities / (1.0 - probabilities))
 
 
 def sigmoid(values: np.ndarray) -> np.ndarray:
-    """Numerically stable sigmoid."""
+    """Apply a numerically stable sigmoid."""
     values = np.asarray(values, dtype=np.float64)
+
     output = np.empty_like(values)
 
     positive = values >= 0
@@ -59,7 +52,11 @@ def sigmoid(values: np.ndarray) -> np.ndarray:
     return output
 
 
-def apply_temperature(probabilities: np.ndarray, temperature: float,) -> np.ndarray:
+def apply_temperature(
+    probabilities: np.ndarray,
+    temperature: float,
+) -> np.ndarray:
+    """Apply temperature scaling to binary probabilities."""
     if temperature <= 0:
         raise ValueError("Temperature must be positive.")
 
@@ -67,21 +64,35 @@ def apply_temperature(probabilities: np.ndarray, temperature: float,) -> np.ndar
     return sigmoid(logits / temperature)
 
 
-def fit_temperature(labels: np.ndarray, probabilities: np.ndarray,) -> float:
+def fit_temperature(
+    labels: np.ndarray,
+    probabilities: np.ndarray,
+) -> float:
+    """Fit temperature using validation log loss only."""
     labels = np.asarray(labels, dtype=np.int32)
     probabilities = clip_probabilities(probabilities)
 
     if labels.shape != probabilities.shape:
-        raise ValueError("Labels and probabilities must have matching shapes.")
+        raise ValueError(
+            "Labels and probabilities must have matching shapes."
+        )
 
-    # Search temperatures from approximately 0.05 to 20.
-    candidates = np.exp(np.linspace(np.log(0.05), np.log(20.0), 2000))
+    candidates = np.exp(
+        np.linspace(
+            np.log(0.05),
+            np.log(20.0),
+            2000,
+        )
+    )
 
     losses = np.asarray(
         [
             log_loss(
                 labels,
-                apply_temperature(probabilities, float(temperature)),
+                apply_temperature(
+                    probabilities,
+                    float(temperature),
+                ),
                 labels=[0, 1],
             )
             for temperature in candidates
@@ -97,162 +108,75 @@ def expected_calibration_error(
     probabilities: np.ndarray,
     bins: int = 15,
 ) -> float:
-    """Calculate equal-width expected calibration error."""
+    """Calculate expected calibration error using equal-width bins."""
     labels = np.asarray(labels, dtype=np.int32)
-    probabilities = np.asarray(probabilities, dtype=np.float64)
+    probabilities = np.asarray(
+        probabilities,
+        dtype=np.float64,
+    )
 
     if bins <= 0:
         raise ValueError("Number of bins must be positive.")
 
+    if labels.shape != probabilities.shape:
+        raise ValueError(
+            "Labels and probabilities must have matching shapes."
+        )
+
     edges = np.linspace(0.0, 1.0, bins + 1)
-    ece = 0.0
     total = len(labels)
+    ece = 0.0
 
     for bin_index in range(bins):
         lower = edges[bin_index]
         upper = edges[bin_index + 1]
 
         if bin_index == bins - 1:
-            mask = (probabilities >= lower) & (probabilities <= upper)
+            mask = (
+                (probabilities >= lower)
+                & (probabilities <= upper)
+            )
         else:
-            mask = (probabilities >= lower) & (probabilities < upper)
+            mask = (
+                (probabilities >= lower)
+                & (probabilities < upper)
+            )
 
         count = int(np.sum(mask))
+
         if count == 0:
             continue
 
-        mean_confidence = float(np.mean(probabilities[mask]))
-        observed_frequency = float(np.mean(labels[mask]))
+        mean_confidence = float(
+            np.mean(probabilities[mask])
+        )
 
-        ece += (count / total) * abs(mean_confidence - observed_frequency)
+        observed_frequency = float(
+            np.mean(labels[mask])
+        )
+
+        ece += (
+            count / total
+        ) * abs(
+            mean_confidence - observed_frequency
+        )
 
     return float(ece)
-
-
-def calibration_metrics(
-    labels: np.ndarray,
-    probabilities: np.ndarray,
-    bins: int = 15,
-) -> dict[str, float]:
-    """Return score-level calibration metrics."""
-    probabilities = clip_probabilities(probabilities)
-
-    return {
-        "roc_auc": float(roc_auc_score(labels, probabilities)),
-        "brier_score": float(brier_score_loss(labels, probabilities)),
-        "log_loss": float(log_loss(labels, probabilities, labels=[0, 1])),
-        "expected_calibration_error": expected_calibration_error(
-            labels,
-            probabilities,
-            bins=bins,
-        ),
-    }
-
-
-def calibration_bins(
-    labels: np.ndarray,
-    probabilities: np.ndarray,
-    bins: int,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Return bin confidence, observed frequency, and counts."""
-    edges = np.linspace(0.0, 1.0, bins + 1)
-
-    mean_probabilities = []
-    positive_frequencies = []
-    counts = []
-
-    for bin_index in range(bins):
-        lower = edges[bin_index]
-        upper = edges[bin_index + 1]
-
-        if bin_index == bins - 1:
-            mask = (probabilities >= lower) & (probabilities <= upper)
-        else:
-            mask = (probabilities >= lower) & (probabilities < upper)
-
-        if not np.any(mask):
-            continue
-
-        mean_probabilities.append(float(np.mean(probabilities[mask])))
-        positive_frequencies.append(float(np.mean(labels[mask])))
-        counts.append(int(np.sum(mask)))
-
-    return (
-        np.asarray(mean_probabilities),
-        np.asarray(positive_frequencies),
-        np.asarray(counts),
-    )
-
-
-def save_reliability_curve(
-    labels: np.ndarray,
-    raw_probabilities: np.ndarray,
-    calibrated_probabilities: np.ndarray,
-    output_path: Path,
-    bins: int,
-) -> None:
-    """Plot raw and calibrated reliability curves."""
-    raw_confidence, raw_frequency, _ = calibration_bins(
-        labels,
-        raw_probabilities,
-        bins,
-    )
-    calibrated_confidence, calibrated_frequency, _ = calibration_bins(
-        labels,
-        calibrated_probabilities,
-        bins,
-    )
-
-    figure, axis = plt.subplots(figsize=(6.8, 5.8))
-
-    axis.plot(
-        [0, 1],
-        [0, 1],
-        linestyle="--",
-        linewidth=1.5,
-        label="Perfect calibration",
-    )
-    axis.plot(
-        raw_confidence,
-        raw_frequency,
-        marker="o",
-        linewidth=2,
-        label="Raw scores",
-    )
-    axis.plot(
-        calibrated_confidence,
-        calibrated_frequency,
-        marker="o",
-        linewidth=2,
-        label="Temperature-scaled",
-    )
-
-    axis.set_xlim(0.0, 1.0)
-    axis.set_ylim(0.0, 1.0)
-    axis.set_xlabel("Mean predicted probability")
-    axis.set_ylabel("Observed tumour frequency")
-    axis.set_title("Held-out test reliability curve")
-    axis.grid(alpha=0.2)
-    axis.legend()
-
-    figure.tight_layout()
-    figure.savefig(output_path, dpi=200)
-    plt.close(figure)
 
 
 def calibrated_threshold(
     raw_threshold: float,
     temperature: float,
 ) -> float:
-    """Transform the original decision threshold after calibration.
-
-    Because temperature scaling is monotonic, transforming the threshold
-    preserves the model's original binary decisions.
-    """
+    """Transform an existing threshold through temperature scaling."""
     scaled = apply_temperature(
-        np.asarray([raw_threshold], dtype=np.float64),
+        np.asarray(
+            [raw_threshold],
+            dtype=np.float64,
+        ),
         temperature,
     )
+
     return float(scaled[0])
 
 
@@ -260,9 +184,13 @@ def confidence_distance(
     probabilities: np.ndarray,
     decision_threshold: float,
 ) -> np.ndarray:
-    """Measure confidence as distance from the locked decision boundary."""
+    """Return absolute distance from the decision boundary."""
     return np.abs(
-        np.asarray(probabilities, dtype=np.float64) - decision_threshold
+        np.asarray(
+            probabilities,
+            dtype=np.float64,
+        )
+        - decision_threshold
     )
 
 
@@ -273,13 +201,55 @@ def validation_confidence_cutoff(
 ) -> float:
     """Choose an abstention cutoff using validation predictions only."""
     if not 0.0 < target_coverage <= 1.0:
-        raise ValueError("Coverage must be in the interval (0, 1].")
+        raise ValueError(
+            "Coverage must be in the interval (0, 1]."
+        )
 
-    confidence = confidence_distance(probabilities, decision_threshold)
+    confidence = confidence_distance(
+        probabilities,
+        decision_threshold,
+    )
 
-    # Retain approximately the requested proportion of most-confident cases.
     quantile = 1.0 - target_coverage
-    return float(np.quantile(confidence, quantile))
+
+    return float(
+        np.quantile(
+            confidence,
+            quantile,
+        )
+    )
+
+
+def calibration_metrics(
+    labels: np.ndarray,
+    probabilities: np.ndarray,
+    bins: int = 15,
+) -> dict[str, float]:
+    """Return calibration and ranking metrics."""
+    probabilities = clip_probabilities(probabilities)
+
+    return {
+        "roc_auc": float(
+            roc_auc_score(labels, probabilities)
+        ),
+        "brier_score": float(
+            brier_score_loss(labels, probabilities)
+        ),
+        "log_loss": float(
+            log_loss(
+                labels,
+                probabilities,
+                labels=[0, 1],
+            )
+        ),
+        "expected_calibration_error": (
+            expected_calibration_error(
+                labels,
+                probabilities,
+                bins=bins,
+            )
+        ),
+    }
 
 
 def selective_metrics(
@@ -288,40 +258,52 @@ def selective_metrics(
     decision_threshold: float,
     confidence_cutoff: float,
 ) -> dict[str, float | int]:
-    """Evaluate test cases retained after validation-derived abstention."""
-    confidence = confidence_distance(probabilities, decision_threshold)
+    """Evaluate performance after deferring low-confidence examples."""
+    confidence = confidence_distance(
+        probabilities,
+        decision_threshold,
+    )
+
     accepted = confidence >= confidence_cutoff
 
     accepted_count = int(np.sum(accepted))
     total_count = int(len(labels))
 
     if accepted_count == 0:
-        raise ValueError("Selective prediction rejected every test example.")
+        raise ValueError(
+            "Selective prediction rejected every example."
+        )
 
     accepted_labels = labels[accepted]
     accepted_probabilities = probabilities[accepted]
-    accepted_predictions = (
+
+    predictions = (
         accepted_probabilities >= decision_threshold
     ).astype(np.int32)
 
     return {
         "accepted_images": accepted_count,
         "deferred_images": total_count - accepted_count,
-        "coverage": float(accepted_count / total_count),
+        "coverage": float(
+            accepted_count / total_count
+        ),
         "accuracy": float(
-            accuracy_score(accepted_labels, accepted_predictions)
+            accuracy_score(
+                accepted_labels,
+                predictions,
+            )
         ),
         "precision": float(
             precision_score(
                 accepted_labels,
-                accepted_predictions,
+                predictions,
                 zero_division=0,
             )
         ),
         "recall": float(
             recall_score(
                 accepted_labels,
-                accepted_predictions,
+                predictions,
                 zero_division=0,
             )
         ),
@@ -335,7 +317,7 @@ def build_selective_results(
     decision_threshold: float,
     coverages: list[float],
 ) -> list[dict]:
-    """Apply validation-derived confidence cutoffs to test predictions."""
+    """Evaluate validation-derived abstention cutoffs on the test set."""
     results = []
 
     for target_coverage in coverages:
@@ -363,41 +345,131 @@ def build_selective_results(
     return results
 
 
+def calibration_bins(
+    labels: np.ndarray,
+    probabilities: np.ndarray,
+    bins: int = 15,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return average prediction and observed rate for non-empty bins."""
+    edges = np.linspace(0.0, 1.0, bins + 1)
+
+    predicted = []
+    observed = []
+
+    for bin_index in range(bins):
+        lower = edges[bin_index]
+        upper = edges[bin_index + 1]
+
+        if bin_index == bins - 1:
+            mask = (
+                (probabilities >= lower)
+                & (probabilities <= upper)
+            )
+        else:
+            mask = (
+                (probabilities >= lower)
+                & (probabilities < upper)
+            )
+
+        if not np.any(mask):
+            continue
+
+        predicted.append(
+            float(np.mean(probabilities[mask]))
+        )
+        observed.append(
+            float(np.mean(labels[mask]))
+        )
+
+    return (
+        np.asarray(predicted),
+        np.asarray(observed),
+    )
+
+
+def save_reliability_curve(
+    labels: np.ndarray,
+    raw_probabilities: np.ndarray,
+    calibrated_probabilities: np.ndarray,
+    output_path: Path,
+    bins: int = 15,
+) -> None:
+    """Save raw and calibrated reliability curves."""
+    raw_predicted, raw_observed = calibration_bins(
+        labels,
+        raw_probabilities,
+        bins=bins,
+    )
+
+    calibrated_predicted, calibrated_observed = calibration_bins(
+        labels,
+        calibrated_probabilities,
+        bins=bins,
+    )
+
+    figure, axis = plt.subplots(figsize=(6.5, 5.5))
+
+    axis.plot(
+        [0, 1],
+        [0, 1],
+        linestyle="--",
+        label="Perfect calibration",
+    )
+
+    axis.plot(
+        raw_predicted,
+        raw_observed,
+        marker="o",
+        label="Raw",
+    )
+
+    axis.plot(
+        calibrated_predicted,
+        calibrated_observed,
+        marker="o",
+        label="Temperature scaled",
+    )
+
+    axis.set_xlabel("Mean predicted probability")
+    axis.set_ylabel("Observed positive frequency")
+    axis.set_title("Reliability curve")
+    axis.set_xlim(0.0, 1.0)
+    axis.set_ylim(0.0, 1.0)
+    axis.grid(alpha=0.2)
+    axis.legend()
+
+    figure.tight_layout()
+    figure.savefig(output_path, dpi=200)
+    plt.close(figure)
+
+
 def save_selective_prediction_plot(
-    selective_results: list[dict],
+    results: list[dict],
     output_path: Path,
 ) -> None:
-    """Plot test accuracy against retained coverage."""
+    """Save coverage-versus-accuracy plot."""
     coverage = [
         100.0 * result["coverage"]
-        for result in selective_results
-    ]
-    accuracy = [
-        100.0 * result["accuracy"]
-        for result in selective_results
+        for result in results
     ]
 
-    figure, axis = plt.subplots(figsize=(7.2, 5.2))
+    accuracy = [
+        100.0 * result["accuracy"]
+        for result in results
+    ]
+
+    figure, axis = plt.subplots(figsize=(6.5, 5.0))
 
     axis.plot(
         coverage,
         accuracy,
         marker="o",
-        linewidth=2.2,
+        linewidth=2,
     )
 
-    for x_value, y_value in zip(coverage, accuracy, strict=True):
-        axis.annotate(
-            f"{y_value:.1f}%",
-            (x_value, y_value),
-            xytext=(0, 7),
-            textcoords="offset points",
-            ha="center",
-        )
-
-    axis.set_xlabel("Test coverage (%)")
+    axis.set_xlabel("Coverage (%)")
     axis.set_ylabel("Accuracy on retained cases (%)")
-    axis.set_title("Selective prediction: coverage vs. accuracy")
+    axis.set_title("Selective prediction")
     axis.grid(alpha=0.2)
 
     figure.tight_layout()
@@ -405,30 +477,33 @@ def save_selective_prediction_plot(
     plt.close(figure)
 
 
-def parse_coverages(raw_coverages: str) -> list[float]:
+def parse_coverages(raw: str) -> list[float]:
     """Parse comma-separated coverage values."""
     coverages = [
         float(value.strip())
-        for value in raw_coverages.split(",")
+        for value in raw.split(",")
         if value.strip()
     ]
 
     if not coverages:
-        raise ValueError("At least one coverage value is required.")
+        raise ValueError(
+            "At least one coverage value is required."
+        )
 
-    if any(not 0.0 < coverage <= 1.0 for coverage in coverages):
-        raise ValueError("Every coverage value must be in (0, 1].")
+    if any(
+        not 0.0 < coverage <= 1.0
+        for coverage in coverages
+    ):
+        raise ValueError(
+            "Coverage values must be in (0, 1]."
+        )
 
     return coverages
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description=(
-            "Fit temperature scaling on validation predictions and "
-            "evaluate calibration/selective prediction on held-out test data."
-        )
-    )
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser()
 
     parser.add_argument(
         "--probabilities",
@@ -440,6 +515,7 @@ def parse_args() -> argparse.Namespace:
             / "probabilities.npz"
         ),
     )
+
     parser.add_argument(
         "--evaluation",
         type=Path,
@@ -450,108 +526,141 @@ def parse_args() -> argparse.Namespace:
             / "evaluation.json"
         ),
     )
+
     parser.add_argument(
         "--output-directory",
         type=Path,
-        default=ROOT / "artifacts" / "calibration",
+        default=(
+            ROOT
+            / "artifacts"
+            / "calibration"
+        ),
     )
+
     parser.add_argument(
         "--figure-directory",
         type=Path,
-        default=ROOT / "docs" / "figures",
+        default=(
+            ROOT
+            / "docs"
+            / "figures"
+        ),
     )
-    parser.add_argument("--bins", type=int, default=15)
+
+    parser.add_argument(
+        "--bins",
+        type=int,
+        default=15,
+    )
+
     parser.add_argument(
         "--coverages",
         default="1.0,0.95,0.90,0.80",
-        help="Comma-separated retained coverage targets.",
     )
 
     return parser.parse_args()
 
 
 def main() -> None:
+    """Run calibration and selective-prediction evaluation."""
     args = parse_args()
 
     if not args.probabilities.is_file():
         raise FileNotFoundError(
-            f"Prediction artifact does not exist: {args.probabilities}"
+            f"Missing probability file: {args.probabilities}"
         )
 
     if not args.evaluation.is_file():
         raise FileNotFoundError(
-            f"Evaluation report does not exist: {args.evaluation}"
+            f"Missing evaluation file: {args.evaluation}"
         )
 
-    saved = np.load(args.probabilities, allow_pickle=False)
+    saved = np.load(
+        args.probabilities,
+        allow_pickle=False,
+    )
 
-    required_arrays = {
+    required = {
         "y_val",
         "validation_probabilities",
         "y_test",
         "test_probabilities",
     }
-    missing_arrays = required_arrays.difference(saved.files)
 
-    if missing_arrays:
+    missing = required.difference(saved.files)
+
+    if missing:
         raise ValueError(
-            "Probability artifact is missing arrays: "
-            + ", ".join(sorted(missing_arrays))
+            "Probability file is missing arrays: "
+            + ", ".join(sorted(missing))
         )
 
-    validation_labels = saved["y_val"].astype(np.int32)
-    validation_probabilities = saved[
-        "validation_probabilities"
-    ].astype(np.float64)
+    validation_labels = (
+        saved["y_val"].astype(np.int32)
+    )
 
-    test_labels = saved["y_test"].astype(np.int32)
-    test_probabilities = saved[
-        "test_probabilities"
-    ].astype(np.float64)
+    validation_probabilities = (
+        saved["validation_probabilities"]
+        .astype(np.float64)
+    )
 
-    with args.evaluation.open(encoding="utf-8") as input_file:
+    test_labels = (
+        saved["y_test"].astype(np.int32)
+    )
+
+    test_probabilities = (
+        saved["test_probabilities"]
+        .astype(np.float64)
+    )
+
+    with args.evaluation.open(
+        encoding="utf-8"
+    ) as input_file:
         evaluation = json.load(input_file)
 
-    raw_threshold = float(evaluation["selected_threshold"])
+    raw_threshold = float(
+        evaluation["selected_threshold"]
+    )
 
     temperature = fit_temperature(
         validation_labels,
         validation_probabilities,
     )
 
-    calibrated_validation_probabilities = apply_temperature(
+    calibrated_validation = apply_temperature(
         validation_probabilities,
         temperature,
     )
-    calibrated_test_probabilities = apply_temperature(
+
+    calibrated_test = apply_temperature(
         test_probabilities,
         temperature,
     )
 
-    transformed_threshold = calibrated_threshold(
+    new_threshold = calibrated_threshold(
         raw_threshold,
         temperature,
     )
 
-    coverages = parse_coverages(args.coverages)
+    coverages = parse_coverages(
+        args.coverages
+    )
 
     selective_results = build_selective_results(
-        calibrated_validation_probabilities,
+        calibrated_validation,
         test_labels,
-        calibrated_test_probabilities,
-        transformed_threshold,
+        calibrated_test,
+        new_threshold,
         coverages,
     )
 
     report = {
-        "source_probabilities": str(args.probabilities),
-        "source_evaluation": str(args.evaluation),
         "calibration_method": "temperature_scaling",
-        "calibration_fit_split": "validation",
+        "fit_split": "validation",
         "evaluation_split": "test",
         "temperature": temperature,
-        "raw_decision_threshold": raw_threshold,
-        "calibrated_decision_threshold": transformed_threshold,
+        "raw_threshold": raw_threshold,
+        "calibrated_threshold": new_threshold,
         "validation": {
             "raw": calibration_metrics(
                 validation_labels,
@@ -560,7 +669,7 @@ def main() -> None:
             ),
             "calibrated": calibration_metrics(
                 validation_labels,
-                calibrated_validation_probabilities,
+                calibrated_validation,
                 bins=args.bins,
             ),
         },
@@ -572,52 +681,66 @@ def main() -> None:
             ),
             "calibrated": calibration_metrics(
                 test_labels,
-                calibrated_test_probabilities,
+                calibrated_test,
                 bins=args.bins,
             ),
         },
         "selective_prediction": selective_results,
     }
 
-    args.output_directory.mkdir(parents=True, exist_ok=True)
-    args.figure_directory.mkdir(parents=True, exist_ok=True)
-
-    report_path = args.output_directory / "calibration_report.json"
-
-    with report_path.open("w", encoding="utf-8") as output_file:
-        json.dump(report, output_file, indent=2)
-
-    np.savez_compressed(
-        args.output_directory / "calibrated_probabilities.npz",
-        y_val=validation_labels,
-        raw_validation_probabilities=validation_probabilities,
-        calibrated_validation_probabilities=(
-            calibrated_validation_probabilities
-        ),
-        y_test=test_labels,
-        raw_test_probabilities=test_probabilities,
-        calibrated_test_probabilities=calibrated_test_probabilities,
+    args.output_directory.mkdir(
+        parents=True,
+        exist_ok=True,
     )
+
+    args.figure_directory.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    report_path = (
+        args.output_directory
+        / "calibration_report.json"
+    )
+
+    with report_path.open(
+        "w",
+        encoding="utf-8",
+    ) as output_file:
+        json.dump(
+            report,
+            output_file,
+            indent=2,
+        )
 
     save_reliability_curve(
         test_labels,
         test_probabilities,
-        calibrated_test_probabilities,
-        args.figure_directory / "reliability_curve.png",
-        args.bins,
+        calibrated_test,
+        (
+            args.figure_directory
+            / "reliability_curve.png"
+        ),
+        bins=args.bins,
     )
 
     save_selective_prediction_plot(
         selective_results,
-        args.figure_directory / "selective_prediction.png",
+        (
+            args.figure_directory
+            / "selective_prediction.png"
+        ),
     )
 
-    print(json.dumps(report, indent=2))
-    print(f"Saved report to {report_path}")
     print(
-        "Saved figures to "
-        f"{args.figure_directory / 'reliability_curve.png'} and "
-        f"{args.figure_directory / 'selective_prediction.png'}"
+        json.dumps(
+            report,
+            indent=2,
+        )
+    )
+
+    print(
+        f"Saved report to {report_path}"
     )
 
 
