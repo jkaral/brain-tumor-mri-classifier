@@ -1,0 +1,860 @@
+{
+  "dataset_root": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2",
+  "split_counts": {
+    "train": 4480,
+    "validation": 1120,
+    "test": 1600
+  },
+  "near_duplicate_hamming_threshold": 4,
+  "exact_cross_split_group_count": 50,
+  "exact_cross_split_groups": [
+    {
+      "sha256": "84b2155377f2b5ec87d3988642b885d5b6249e7907486184ac311e15a8a599a9",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1379.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_810.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "ce8380b51fcf1dbb1347069191fbeabf20712e1b0673efc65c08c87c70b1a1af",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1291.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_490.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "a1ee82164acd190067400d50f236fbb6004c0002fe3c09e4cf2d71752865140b",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_132.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_564.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "2ad6ffff97ce8cbfd5d4785955ea16a6ccf7090eb67a8015e47cd8902571b827",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1085.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_98.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_767.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_692.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "29f5011764730ed401f04b4978195c0b9fcedb005c3408f89a7586259cb1b675",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_493.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_664.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "1180fefcd5ba2a8f43c541c3158c3d6b3edb8309eab8dc9c61f109d10d5b5050",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1330.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_825.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "6b73dc365fbc93ff66b40c68f2e5cd259e650193088389a5f1b968b8c537f4f4",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_255.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_134.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "de35915b30be9cb513305bb03b1fcf263dadf7259aa666e02f09215118f7f65a",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1211.jpg"
+        },
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_160.jpg"
+        },
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1154.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1339.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "f764c8846c7fe11dce4e99b2bfa153347eb2976ae53857392f31f82b127b2270",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_668.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1181.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "de08225737a2a8a8ddda2e0684baa925356b9c0fe77585f2992a0980398c2d07",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1015.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1339.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "8d1b8cb2975b43db869caaecbffd11f51651b6c25d35928f84cc295215cfb822",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_995.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_673.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "7a7fcfb55378e4367cb3f163dc510df7e4b5f95d8fee5e4407b6ef397d56e243",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1320.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1179.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "79b6fe05b46ee2a734c4da64cd109bc508bfd1b76f46e9c496dbb406f86139f9",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_753.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_540.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "9a1a7d12c935c0029511710dba377c2d37ecf4924ec19c1644b6116b48c33610",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_819.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1016.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "14a873e8998c4a88896fd7be1155eeaf656b88209c8e9fcf7db731de3478484c",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_969.jpg"
+        },
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_698.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_246.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "2bcf7f2051a470cc90e74522c8141783f4e6e3b36b033e622bb446070804fbce",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_473.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_778.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "17bd1588f84aafbccb846c974ae1f24cef5ce6f0fc0f32a4417af50bfe9f52cd",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_781.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1244.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1392.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "20b0c7de1c131e75deff54e8f0c51eef6c48116cdcbf7bb1f47fc7e4c7f07ab1",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_232.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_224.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_29.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "e9a63334af63a2ec8cab2149ec091466c60df5fe115cf36cc30c9304dacbb376",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1145.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_430.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1234.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "23794834130a37699051efa29c29b9af12ae94b6a65d3957d7f9ad667f9bdf0f",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1336.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_165.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "c5482c04ad0af03abc08de261901fdaa6811a99ca11a270e8dc89c550e3ccdfa",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1326.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_411.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "2cd1096a6415c70403948e7aaac0694451619850a4ce545b4f9134b06401248b",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1400.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1077.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "e50960c499e99a17df350e4f261d140bb10d74d9a3d81d91c4878542e2b32538",
+      "images": [
+        {
+          "split": "train",
+          "category": "meningioma",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/meningioma/Tr-aug-me_90.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "meningioma",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/meningioma/Tr-me_1242.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "7f04f0b6fd5821e19cf5a273a540df06a1f6bdcaa63bb235743e274fff825fbd",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_766.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_967.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "ac081dc77c62c1902feb757aa652c2af19c67d31ec646fd3f2a50249729f570c",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_943.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1196.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_1122.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "ac76926d9f73fd42c57092e3f991abe3036320552092ebf8d69d60d736a93622",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_120.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_763.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "8d463bf588c1bc9e685df1729434a541f187054456fe244024966078fe1aef61",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_77.jpg"
+        },
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_356.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_759.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "7c103b082c141631e8475390a8b06ef7ef0cfba10e61cf2d4ce9dd1e2b08dfb0",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_699.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1309.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "25dbc9664f03a7af82b74aec6c5497cd94dc5f6f639907656725d0ac88cfd111",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1235.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_854.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1154.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1360.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "c1bf41ddb56396fd0e74b2eb7212c96a6a915ee86737c060c9db8e1439ff0390",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1062.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_5.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_693.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "fd701e8cdd7a47b2b7198334e09d7947edf3d2efdd68b73b8d47282256f9f475",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1051.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1158.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_330.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "7d5fb3078f6ed56884ebf8c14928f4e8e05ffd2065cf1b5f4b23cd6dfa3f49ef",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1208.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_410.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "2779f5d9e97ff8a2283e34ab88a7e6de22c561367944758e2796f427fd2dddd9",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1288.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_863.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_831.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "2db2426323e2d116ddfd79ca17da4f0c3861a527eba11414ce1ffe403b5810bd",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_293.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_60.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "e3ea07d69e4b3242a2bc56046a2c9547c6e15d8169d3bdad7d4f8f9baf2a2442",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_935.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_8.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_315.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "ca5a51914cad005d72af57fa6c9142fc9d650ca06ba23f3e839991c3fa4c8b36",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_931.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1140.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_749.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "413708f4f5a9e003997c5c966035431a1bd741b16cde99a42ca6155cccf8f17d",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_750.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_843.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "a3d86920c0bc02e0c062091ab21078a4387ed519b881c89568ab969d3dc37d33",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1061.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1134.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "25c13de1f058a3b2d081828fab9a6589ac1feba9a0c3963e8033115e3b9bc2ee",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_250.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_472.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "5c32bc4af148302670ffb8a5aa58fc239cea60fbbfc08ba34a65230a0de6f6f4",
+      "images": [
+        {
+          "split": "train",
+          "category": "meningioma",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/meningioma/Tr-aug-me_91.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "meningioma",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/meningioma/Tr-me_245.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "3fcd47df13022dff9310847e66344a301655fc62a565598336433f9c098e5074",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_58.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_906.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "59b7545faed7fe8962c1853d6dd379ab5e5ddfe6970a42a0017a4114fb1a95ad",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_476.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_396.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "72f5f6723c7b92f641fb5d44513b6111c348e43005f8c1f4829f28eebd1117b2",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_371.jpg"
+        },
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_109.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1183.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "6c8c2a11f01b532a75a01f052e3f536e10bcdca633e77ef3001d8ed852e83ee7",
+      "images": [
+        {
+          "split": "train",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_805.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "pituitary",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/pituitary/Tr-pi_878.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "49db0659a53802695ac4af817cff544f8034e7c9883a6751e0e321c86337f86a",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_990.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1240.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "14963471b7c2744df51c1da54f4e519cecc34aa12944f1968620da1d36d2c5c2",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_503.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1021.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "db13da94073aaa03960e97acb4ab41019e4be57c88c8b708e66791696f4bc4b9",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1095.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_69.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "f3ce33b26a3784299fc2bc72215752b531bb1ff11e9b65dc39376039f8809f64",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1070.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_412.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "fe20d08e5475898e9b66661cddbe32d6d006438e57c36cd87be27b8dd9c0676d",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_1190.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_44.jpg"
+        }
+      ]
+    },
+    {
+      "sha256": "37d13e11e66c736b2174792a44b897777f212e935d5c74141ced8dc58d610672",
+      "images": [
+        {
+          "split": "train",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_435.jpg"
+        },
+        {
+          "split": "validation",
+          "category": "notumor",
+          "path": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2/Training/notumor/Tr-no_755.jpg"
+        }
+      ]
+    }
+  ],
+  "near_duplicate_cross_split_pair_count": 5702,
+  "near_duplicate_pairs_written": 5702,
+  "near_duplicate_pairs_truncated": false,
+  "limitations": [
+    "Perceptual-hash matches are candidates and require manual review.",
+    "This audit cannot prove patient independence without patient IDs.",
+    "A separate external dataset is still required for external validation."
+  ]
+}

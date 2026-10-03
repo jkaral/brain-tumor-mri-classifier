@@ -1,0 +1,40 @@
+{
+  "split_counts": {
+    "excluded": 226,
+    "test": 1600,
+    "train": 4300,
+    "validation": 1074
+  },
+  "category_counts": {
+    "excluded|glioma": 4,
+    "excluded|meningioma": 104,
+    "excluded|notumor": 118,
+    "test|glioma": 400,
+    "test|meningioma": 400,
+    "test|notumor": 400,
+    "test|pituitary": 400,
+    "train|glioma": 1117,
+    "train|meningioma": 1037,
+    "train|notumor": 1026,
+    "train|pituitary": 1120,
+    "validation|glioma": 279,
+    "validation|meningioma": 259,
+    "validation|notumor": 256,
+    "validation|pituitary": 280
+  },
+  "validation_counts": {
+    "glioma": 279,
+    "meningioma": 259,
+    "pituitary": 280,
+    "notumor": 256
+  },
+  "excluded_training_images": 226,
+  "component_count": 6823,
+  "dataset_root": "/home/codespace/.cache/kagglehub/datasets/masoudnickparvar/brain-tumor-mri-dataset/versions/2",
+  "seed": 42,
+  "validation_fraction": 0.2,
+  "structural_similarity_threshold": 0.995,
+  "exact_duplicate_edges": 68,
+  "structural_duplicate_edges": 346,
+  "policy": "The original Testing folder remains test-only. Training-folder images grouped with a test image are excluded. Other duplicate groups are assigned wholly to train or validation."
+}

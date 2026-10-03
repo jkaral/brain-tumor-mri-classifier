@@ -1,0 +1,66 @@
+{
+  "candidate_pair_count": 5702,
+  "similarity_thresholds": {
+    "0.9": {
+      "pair_count": 1189,
+      "split_pairs": {
+        "train|validation": 362,
+        "train|test": 662,
+        "validation|test": 165
+      },
+      "different_category_pairs": 4,
+      "conflicting_binary_label_pairs": 0
+    },
+    "0.95": {
+      "pair_count": 1118,
+      "split_pairs": {
+        "train|validation": 341,
+        "train|test": 618,
+        "validation|test": 159
+      },
+      "different_category_pairs": 4,
+      "conflicting_binary_label_pairs": 0
+    },
+    "0.98": {
+      "pair_count": 809,
+      "split_pairs": {
+        "train|validation": 254,
+        "train|test": 436,
+        "validation|test": 119
+      },
+      "different_category_pairs": 3,
+      "conflicting_binary_label_pairs": 0
+    },
+    "0.99": {
+      "pair_count": 549,
+      "split_pairs": {
+        "train|validation": 165,
+        "train|test": 298,
+        "validation|test": 86
+      },
+      "different_category_pairs": 3,
+      "conflicting_binary_label_pairs": 0
+    },
+    "0.995": {
+      "pair_count": 346,
+      "split_pairs": {
+        "train|validation": 102,
+        "train|test": 189,
+        "validation|test": 55
+      },
+      "different_category_pairs": 0,
+      "conflicting_binary_label_pairs": 0
+    },
+    "0.999": {
+      "pair_count": 172,
+      "split_pairs": {
+        "train|validation": 35,
+        "train|test": 110,
+        "validation|test": 27
+      },
+      "different_category_pairs": 0,
+      "conflicting_binary_label_pairs": 0
+    }
+  },
+  "interpretation": "SSIM is a screening measure, not patient identification. Review the highest-scoring pairs before choosing a grouping threshold."
+}
