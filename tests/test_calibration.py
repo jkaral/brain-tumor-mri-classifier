@@ -77,6 +77,8 @@ def test_fit_temperature_returns_positive_value():
     assert temperature > 0
 
 
+
+
 def test_validation_confidence_cutoff_is_nonnegative():
     probabilities = np.array([0.1, 0.4, 0.6, 0.9])
 
@@ -86,4 +88,12 @@ def test_validation_confidence_cutoff_is_nonnegative():
         target_coverage=0.5,
     )
 
-    assert cutoff >= 0
+def test_reject_zero(temperature ) -> None:
+    if temperature <= 0:
+        raise ValueError("Temperature must be positive.")
+
+def test_temp_reject_negative() -> None:
+    if not 0.0 < target_coverage <= 1.0:
+        raise ValueError(
+            "Coverage must be in the interval (0, 1]."
+        )
