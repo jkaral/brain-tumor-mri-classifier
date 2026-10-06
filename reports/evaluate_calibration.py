@@ -57,8 +57,6 @@ def apply_temperature(
     temperature: float,
 ) -> np.ndarray:
     """Apply temperature scaling to binary probabilities."""
-    if temperature <= 0:
-        raise ValueError("Temperature must be positive.")
 
     logits = probabilities_to_logits(probabilities)
     return sigmoid(logits / temperature)
@@ -200,10 +198,6 @@ def validation_confidence_cutoff(
     target_coverage: float,
 ) -> float:
     """Choose an abstention cutoff using validation predictions only."""
-    if not 0.0 < target_coverage <= 1.0:
-        raise ValueError(
-            "Coverage must be in the interval (0, 1]."
-        )
 
     confidence = confidence_distance(
         probabilities,
