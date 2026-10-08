@@ -206,7 +206,10 @@ def validation_confidence_cutoff(
 
     quantile = 1.0 - target_coverage
 
-    return float(
+    if target_coverage == 1.0:
+        return 0.0
+    else:
+        return float(
         np.quantile(
             confidence,
             quantile,
@@ -251,55 +254,155 @@ def selective_metrics(
     probabilities: np.ndarray,
     decision_threshold: float,
     confidence_cutoff: float,
-) -> dict[str, float | int]:
-    """Evaluate performance after deferring low-confidence examples."""
+) -> dict[str, float | int | None]:
+    """Evaluate accepted predictions and audit deferred cases."""
+    labels = np.asarray(labels)
+    probabilities = np.asarray(probabilities, dtype=np.float64)
+
+    if labels.ndim != 1 or probabilities.ndim != 1:
+        raise ValueError("Labels and probabilities must be one-dimensional.")
+
+    if labels.shape != probabilities.shape:
+        raise ValueError("Labels and probabilities must have matching shapes.")
+
+    if labels.size == 0:
+        raise ValueError("At least one example is required.")
+
+    if not np.all(np.isin(labels, [0, 1])):
+        raise ValueError("Labels must contain only 0 and 1.")
+
+    if (
+        not np.all(np.isfinite(probabilities))
+        or np.any((probabilities < 0.0) | (probabilities > 1.0))
+    ):
+        raise ValueError("Probabilities must be finite and within [0, 1].")
+
+    if not np.isfinite(decision_threshold) or not 0.0 <= decision_threshold <= 1.0:
+        raise ValueError("Decision threshold must be within [0, 1].")
+
+    if not np.isfinite(confidence_cutoff) or confidence_cutoff < 0.0:
+        raise ValueError("Confidence cutoff must be finite and non-negative.")
+
+    labels = labels.astype(np.int32)
+
     confidence = confidence_distance(
         probabilities,
         decision_threshold,
     )
 
     accepted = confidence >= confidence_cutoff
+    deferred = ~accepted
 
-    accepted_count = int(np.sum(accepted))
-    total_count = int(len(labels))
-
-    if accepted_count == 0:
-        raise ValueError(
-            "Selective prediction rejected every example."
-        )
-
-    accepted_labels = labels[accepted]
-    accepted_probabilities = probabilities[accepted]
-
+    # Calculate predictions for every image, including deferred images.
     predictions = (
-        accepted_probabilities >= decision_threshold
+        probabilities >= decision_threshold
     ).astype(np.int32)
 
+    tumour = labels == 1
+    non_tumour = labels == 0
+    predicted_tumour = predictions == 1
+    predicted_non_tumour = predictions == 0
+    errors = predictions != labels
+
+    total_count = int(labels.size)
+    accepted_count = int(np.sum(accepted))
+    deferred_count = int(np.sum(deferred))
+
+    tumour_count = int(np.sum(tumour))
+    non_tumour_count = int(np.sum(non_tumour))
+
+    accepted_tumours = int(np.sum(accepted & tumour))
+    accepted_non_tumours = int(np.sum(accepted & non_tumour))
+
+    deferred_tumours = int(np.sum(deferred & tumour))
+    deferred_non_tumours = int(np.sum(deferred & non_tumour))
+
+    # Confusion counts for accepted cases only.
+    true_positives = int(
+        np.sum(accepted & tumour & predicted_tumour)
+    )
+    false_positives = int(
+        np.sum(accepted & non_tumour & predicted_tumour)
+    )
+    true_negatives = int(
+        np.sum(accepted & non_tumour & predicted_non_tumour)
+    )
+    false_negatives = int(
+        np.sum(accepted & tumour & predicted_non_tumour)
+    )
+
+    accepted_errors = int(np.sum(accepted & errors))
+    deferred_errors = int(np.sum(deferred & errors))
+    total_errors = int(np.sum(errors))
+
+    def safe_rate(numerator: int, denominator: int) -> float | None:
+        """Return None when a rate has no valid denominator."""
+        if denominator == 0:
+            return None
+        return float(numerator / denominator)
+
     return {
+        "total_images": total_count,
         "accepted_images": accepted_count,
-        "deferred_images": total_count - accepted_count,
-        "coverage": float(
-            accepted_count / total_count
+        "deferred_images": deferred_count,
+        "coverage": float(accepted_count / total_count),
+
+        # Existing accepted-case metrics.
+        "accuracy": safe_rate(
+            true_positives + true_negatives,
+            accepted_count,
         ),
-        "accuracy": float(
-            accuracy_score(
-                accepted_labels,
-                predictions,
-            )
+        "precision": safe_rate(
+            true_positives,
+            true_positives + false_positives,
         ),
-        "precision": float(
-            precision_score(
-                accepted_labels,
-                predictions,
-                zero_division=0,
-            )
+        "recall": safe_rate(
+            true_positives,
+            accepted_tumours,
         ),
-        "recall": float(
-            recall_score(
-                accepted_labels,
-                predictions,
-                zero_division=0,
-            )
+
+        # Accepted-case confusion counts.
+        "accepted_true_positives": true_positives,
+        "accepted_false_positives": false_positives,
+        "accepted_true_negatives": true_negatives,
+        "accepted_false_negatives": false_negatives,
+
+        # Class counts and coverage.
+        "total_tumour_images": tumour_count,
+        "total_non_tumour_images": non_tumour_count,
+        "accepted_tumour_images": accepted_tumours,
+        "accepted_non_tumour_images": accepted_non_tumours,
+        "deferred_tumour_images": deferred_tumours,
+        "deferred_non_tumour_images": deferred_non_tumours,
+        "tumour_coverage": safe_rate(
+            accepted_tumours,
+            tumour_count,
+        ),
+        "non_tumour_coverage": safe_rate(
+            accepted_non_tumours,
+            non_tumour_count,
+        ),
+
+        # Fraction of all tumour images automatically detected.
+        "automatic_tumour_detection_rate": safe_rate(
+            true_positives,
+            tumour_count,
+        ),
+
+        # Audit whether deferral captures difficult cases.
+        "accepted_errors": accepted_errors,
+        "deferred_errors_before_deferral": deferred_errors,
+        "accepted_error_rate": safe_rate(
+            accepted_errors,
+            accepted_count,
+        ),
+        "deferred_error_rate_before_deferral": safe_rate(
+            deferred_errors,
+            deferred_count,
+        ),
+        "fraction_of_all_errors_deferred": safe_rate(
+            deferred_errors,
+            total_errors,
         ),
     }
 
