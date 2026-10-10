@@ -57,6 +57,8 @@ def apply_temperature(
     temperature: float,
 ) -> np.ndarray:
     """Apply temperature scaling to binary probabilities."""
+    if temperature <= 0:
+        raise ValueError("Temperature must be positive.")
 
     logits = probabilities_to_logits(probabilities)
     return sigmoid(logits / temperature)
