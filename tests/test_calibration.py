@@ -1,10 +1,12 @@
 import numpy as np
+import pytest
 
 from reports.evaluate_calibration import (
     apply_temperature,
     calibrated_threshold,
     expected_calibration_error,
     fit_temperature,
+    selective_metrics,
     validation_confidence_cutoff,
 )
 
@@ -40,12 +42,15 @@ def test_calibrated_threshold_preserves_decisions():
         probabilities,
         temperature,
     )
+
     scaled_threshold = calibrated_threshold(
         threshold,
         temperature,
     )
 
-    scaled_predictions = scaled_probabilities >= scaled_threshold
+    scaled_predictions = (
+        scaled_probabilities >= scaled_threshold
+    )
 
     np.testing.assert_array_equal(
         original_predictions,
@@ -68,15 +73,17 @@ def test_expected_calibration_error_is_zero_for_perfect_groups():
 
 def test_fit_temperature_returns_positive_value():
     labels = np.array([0, 0, 0, 1, 1, 1])
+
     probabilities = np.array(
         [0.10, 0.20, 0.35, 0.65, 0.80, 0.90]
     )
 
-    temperature = fit_temperature(labels, probabilities)
+    temperature = fit_temperature(
+        labels,
+        probabilities,
+    )
 
     assert temperature > 0
-
-
 
 
 def test_validation_confidence_cutoff_is_nonnegative():
@@ -88,12 +95,54 @@ def test_validation_confidence_cutoff_is_nonnegative():
         target_coverage=0.5,
     )
 
-def test_reject_zero(temperature ) -> None:
-    if temperature <= 0:
-        raise ValueError("Temperature must be positive.")
+    assert cutoff >= 0
 
-def test_temp_reject_negative() -> None:
-    if not 0.0 < target_coverage <= 1.0:
-        raise ValueError(
-            "Coverage must be in the interval (0, 1]."
+
+def test_temperature_rejects_zero():
+    probabilities = np.array([0.2, 0.8])
+
+    with pytest.raises(ValueError):
+        apply_temperature(
+            probabilities,
+            temperature=0.0,
         )
+
+
+def test_fit_temperature_rejects_mismatched_shapes():
+    labels = np.array([0, 1, 1])
+    probabilities = np.array([0.2, 0.8])
+
+    with pytest.raises(ValueError):
+        fit_temperature(
+            labels,
+            probabilities,
+        )
+
+
+def test_ece_rejects_zero_bins():
+    labels = np.array([0, 1])
+    probabilities = np.array([0.2, 0.8])
+
+    with pytest.raises(ValueError):
+        expected_calibration_error(
+            labels,
+            probabilities,
+            bins=0,
+        )
+
+
+def test_selective_metrics_rejects_invalid_probabilities():
+    labels = np.array([0, 1])
+    probabilities = np.array([0.2, 1.2])
+
+    with pytest.raises(ValueError):
+        selective_metrics(
+            labels,
+            probabilities,
+            decision_threshold=0.5,
+            confidence_cutoff=0.1,
+        )
+
+
+
+
