@@ -24,28 +24,36 @@ Threshold calibration reduced false negatives from 109 to 83, a **23.9% reductio
 
 The ROC-AUC reported here is the exact score-level value calculated from the saved test predictions with scikit-learn (`0.996285`). TensorFlow's streaming evaluation displayed `0.9917` because it approximated AUC over a finite threshold grid.
 
-### Clean-split fine-tuning status
+### Leakage-resistant clean-split evaluation
 
-`train_clean_baseline.py` and `fine_tune_clean_model.py` can evaluate both models on the same leakage-resistant manifest. Their clean-split evaluation reports are not committed, so no improvement is claimed. Run the frozen baseline first, then fine-tune from its saved checkpoint using the same manifest and validation recall target. Fine-tuning now requires the baseline report and matching manifest hash before training. Publish both evaluation reports and prediction files, their split/audit outputs and model provenance before reporting a comparison. The original metrics above are not a substitute for the clean frozen baseline.
+To reduce the risk of inflated performance from duplicate and near-duplicate MRI images appearing across splits, a second evaluation was performed using the leakage-resistant split manifest generated from the dataset audit.
 
-![Tuned confusion matrix](docs/figures/confusion_matrix_tuned.png)
+The frozen VGG16 baseline was retrained and evaluated on this clean split. The corresponding evaluation report and saved prediction probabilities are committed under `artifacts/clean_baseline/`.
+
+| Metric | Clean-split test result |
+|---|---:|
+| ROC-AUC | **0.9915** |
+| Accuracy at 0.5 threshold | **91.88%** |
+| Accuracy at validation-selected threshold | **91.56%** |
+| Recall / sensitivity | **89.08%** |
+| Specificity | **99.00%** |
+
+The validation-selected decision threshold was `0.5428`. As with the original evaluation pipeline, the threshold was selected using validation predictions only and then applied unchanged to the held-out test set.
 
 ### Performance by source category
 
 | Source category | Correct | Errors | Correctly classified |
 |---|---:|---:|---:|
-| Glioma | 357/400 | 43 | 89.25% |
-| Meningioma | 366/400 | 34 | 91.50% |
-| Pituitary | 394/400 | 6 | 98.50% |
-| No tumour | 398/400 | 2 | 99.50% |
+| Glioma | 349/400 | 51 | **87.25%** |
+| Meningioma | 326/400 | 74 | **81.50%** |
+| Pituitary | 394/400 | 6 | **98.50%** |
+| No tumour | 396/400 | 4 | **99.00%** |
 
-![Subtype performance](docs/figures/subtype_performance.png)
+The clean-split evaluation shows the same broad error pattern as the original experiment, with glioma and especially meningioma remaining the most difficult tumour categories. Together, glioma and meningioma account for 125 of the 131 false negatives under the validation-selected threshold.
 
-Glioma and meningioma accounted for 77 of the 83 remaining false negatives. This is the model's clearest observed limitation.
+These results are lower than those obtained from the original image-level split and should be treated as the more conservative baseline for subsequent model comparisons.
 
-When `artifacts/evaluation_probabilities.npz` is present, the reporting script also produces the held-out test ROC curve:
-
-![Test ROC curve](docs/figures/roc_curve.png)
+The saved clean-split probabilities can also be used for additional analyses such as calibration and selective prediction.
 
 ## Dataset
 
