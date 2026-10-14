@@ -38,6 +38,8 @@ The frozen VGG16 baseline was retrained and evaluated on this clean split. The c
 | Recall / sensitivity | **89.08%** |
 | Specificity | **99.00%** |
 
+![Clean-split tuned confusion matrix](docs/figures/clean_baseline/confusion_matrix_tuned.png)
+
 The validation-selected decision threshold was `0.5428`. As with the original evaluation pipeline, the threshold was selected using validation predictions only and then applied unchanged to the held-out test set.
 
 ### Performance by source category
@@ -49,9 +51,14 @@ The validation-selected decision threshold was `0.5428`. As with the original ev
 | Pituitary | 394/400 | 6 | **98.50%** |
 | No tumour | 396/400 | 4 | **99.00%** |
 
+![Clean-split subtype performance](docs/figures/clean_baseline/subtype_performance.png)
+
+
 The clean-split evaluation shows the same broad error pattern as the original experiment, with glioma and especially meningioma remaining the most difficult tumour categories. Together, glioma and meningioma account for 125 of the 131 false negatives under the validation-selected threshold.
 
 These results are lower than those obtained from the original image-level split and should be treated as the more conservative baseline for subsequent model comparisons.
+
+![Clean-split test ROC curve](docs/figures/clean_baseline/roc_curve.png)
 
 The saved clean-split probabilities can also be used for additional analyses such as calibration and selective prediction.
 
