@@ -79,11 +79,14 @@ The repository does not redistribute the MRI files. Users must review and comply
 
 1. MRI images were read in grayscale and resized to 128 × 128 pixels.
 2. Grayscale images were converted to three channels inside the model for VGG16 compatibility.
-3. A VGG16 backbone pretrained on ImageNet was frozen for transfer learning.
-4. The classification head used global average pooling, a 128-unit ReLU layer with L2 regularization, 50% dropout, and a sigmoid output.
-5. Training used rotation, zoom and contrast augmentation, weighted binary cross-entropy, Adam, early stopping, learning-rate reduction, and best-checkpoint saving.
-6. Model selection used validation ROC-AUC. The supplied testing folder remained separate until final evaluation.
-7. The decision threshold was selected using validation predictions only, then applied once to test predictions.
+3. The dataset was audited for duplicate and near-duplicate images to reduce the risk of related scans appearing across training, validation, and test splits.
+4. A leakage-resistant split manifest was generated and used to define the clean training and validation partitions while preserving the held-out test set.
+5. A VGG16 backbone pretrained on ImageNet was frozen for transfer learning.
+6. The classification head used global average pooling, a 128-unit ReLU layer with L2 regularization, 50% dropout, and a sigmoid output.
+7. Training used rotation, zoom and contrast augmentation, weighted binary cross-entropy, Adam, early stopping, learning-rate reduction, and best-checkpoint saving.
+8. Model selection used validation ROC-AUC.
+9. The decision threshold was selected using validation predictions only to satisfy the target tumour recall, then locked and applied unchanged to the held-out test set.
+10. Saved validation and test predictions were used for calibration analysis and selective-prediction experiments without using the test set to tune those parameters.
 
 The KMeans pseudo-masks explored during early preprocessing were **not used** by the final classifier. This project does not perform segmentation or tumour localization.
 
